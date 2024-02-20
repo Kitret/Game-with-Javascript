@@ -1,3 +1,9 @@
+let playerState="ko";
+const dropDown = document.getElementById("animations");
+dropDown.addEventListener('change', (e) => {
+    playerState = e.target.value;
+});
+
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = canvas.width = 600;
@@ -13,26 +19,67 @@ const spriteAnimations = [];
 const animationStates = [
     {
         name : "idle",
-        frames : 7
+        frame : 7
     },
     {
         name : "jump",
         frame : 7
+    },
+    {
+        name : "fall",
+        frame: 7
+    },
+    {
+        name : "run",
+        frame : 9
+    },
+    {
+        name : "dizzy",
+        frame : 11
+    },
+    {
+        name : "sit",
+        frame : 5
+    },
+    {
+        name : "roll",
+        frame : 7
+    },
+    {
+        name : "bite",
+        frame : 7
+    },
+    {
+        name : "ko",
+        frame : 12
+    },
+    {
+        name : "gethit",
+        frame : 4
     }
 ];
 
-let frameX = 0;
-let frameY = 0;
+animationStates.forEach((states,index) => {
+    let frame={
+        loc:[]
+    };
+    for(let j=0;j<states.frame;j++) {
+        let posX = j * spriteWidth;
+        let posY = index * spriteHeight;
+        frame.loc.push({x : posX, y : posY});
+    }
+    spriteAnimations[states.name] = frame;
+});
+
 let gameFrame = 0;
 let staggerFrame = 5;
 
 function animate() {
     ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    // ctx.fillRect(50,50,100,100);
-    // ctx.drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);
-    let position = Math.floor(gameFrame/staggerFrame)%6;
-    frameX = spriteWidth * position;
-    ctx.drawImage(playerImage,frameX,frameY * spriteHeight,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
+    let position = Math.floor(gameFrame/staggerFrame) % spriteAnimations[playerState].loc.length;
+    let frameX = spriteWidth * position;
+    let frameY = spriteAnimations[playerState].loc[position].y;
+    ctx.drawImage(playerImage,frameX,frameY,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
 
     gameFrame++;
     requestAnimationFrame(animate);
