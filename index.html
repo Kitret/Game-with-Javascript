@@ -3,25 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sprite Animation</title>
+    <title>Parallax Background</title>
     <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <canvas id="canvas1"></canvas>
-    <div class="control">
-        <label for="animations">Choose Animations : </label>
-        <select name="animations" id="animations">
-            <option value="idle">Idle</option>
-            <option value="jump">Jump</option>
-            <option value="fall">Fall</option>
-            <option value="run">Run</option>
-            <option value="dizzy">Dizzy</option>
-            <option value="sit">Sit</option>
-            <option value="roll">Roll</option>
-            <option value="bite">Bite</option>
-            <option value="ko">K.O</option>
-            <option value="gethit">Get Hit</option>
-        </select>
+    <div id="container">
+        <canvas id="canvas1"></canvas>
+        <p>Game Speed : <span id="showGameSpeed"></span></p>
+        <input type="range" min="0" max="20" value="5" class="slider" id="slider">
     </div>
     
     <script src="script.js"></script>
