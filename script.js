@@ -3,18 +3,18 @@ const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
 const CANVAS_WIDTH = canvas.width = 500;
 const CANVAS_HEIGHT = canvas.height = 1000;
-const numberOfEnemies = 10;
+const numberOfEnemies = 100;
 
 const enemyImg = new Image();
-enemyImg.src = "img/enemy1.png";
+enemyImg.src = "img/enemy2.png";
 
 let gameFrame=0;
 class Enemy {
     constructor(image) {
         this.image = image;
         this.speed = Math.random() * 4;
-        this.spriteWidth = 293;
-        this.spriteHeight = 155;
+        this.spriteWidth = 266;
+        this.spriteHeight = 188;
         this.width = this.spriteWidth / 2.5;
         this.height = this.spriteHeight / 2.5;
         this.frame = 0;
@@ -22,7 +22,7 @@ class Enemy {
         this.x = Math.random() * (CANVAS_WIDTH - this.width);
         this.y = Math.random() * (CANVAS_HEIGHT - this.height);
         this.angle = 0;
-        this.angleSpeed = Math.random() * 0.2;
+        this.angleSpeed = Math.random() * 0.2 + 0.02;
         this.curve = Math.random() * 7;
     }
     
