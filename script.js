@@ -1,32 +1,33 @@
 const canvas = document.getElementById("canvas1");
 const ctx = canvas.getContext("2d");
-const CANVAS_WIDTH = canvas.width = 600;
-const CANVAS_HEIGHT = canvas.height = 600;
+const CANVAS_WIDTH = canvas.width = 700;
+const CANVAS_HEIGHT = canvas.height = 500;
 
-const playerImage = new Image();
-playerImage.src="img/shadow_dog.png";
+const explosions = [];
+let canvasPosition = canvas.getBoundingClientRect();
 
-const spriteWidth = 575;
-const spriteHeight = 523;
+class Explosion {
+    constructor(x,y) {
+        this.x = x;
+        this.y = y;
+        this.spriteWidth = 200;
+        this.spriteHeight = 179;
+        this.image = new Image();
+        this.image.src = 'boom.png';
+        this.frame = 0;
 
-const spriteAnimations = [];
-const animationStates = [];
+    }
 
-let frameX = 0;
-let frameY = 0;
-let gameFrame = 0;
-let staggerFrame = 5;
+    update() {
+        this.frame++;
+    }
 
-function animate() {
-    ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    // ctx.fillRect(50,50,100,100);
-    // ctx.drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);
-    let position = Math.floor(gameFrame/staggerFrame)%6;
-    frameX = spriteWidth * position;
-    ctx.drawImage(playerImage,frameX,frameY * spriteHeight,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
-
-    gameFrame++;
-    requestAnimationFrame(animate);
+    draw() {
+        ctx.drawImage(this.image,this.frame * this.spriteWidth, this.spriteHeight,this.x,this.y,this.spriteWidth,this.spriteHeight);
+    }
 }
 
-animate();
+window.addEventListener('click', (e) => {
+    ctx.fillStyle = "white";
+    ctx.fillRect(e.x - canvasPosition.left - 25,e.y - canvasPosition.top - 25,50,50);
+});
