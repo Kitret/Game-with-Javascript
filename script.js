@@ -1,41 +1,47 @@
-const canvas = document.getElementById("canvas1");
-const ctx = canvas.getContext("2d");
-const CANVAS_WIDTH = canvas.width = 600;
-const CANVAS_HEIGHT = canvas.height = 600;
+/** @Type {HTMLCanvasElement} */
+let canvas = document.getElementById("canvas1");
+let ctx = canvas.getContext("2d");
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
 
-const playerImage = new Image();
-playerImage.src="img/shadow_dog.png";
+let ravens = [];
+let ravenInterval=500;
+let lastTime=0;
+let timeToNextRaven=0;
 
-const spriteWidth = 575;
-const spriteHeight = 523;
-
-const spriteAnimations = [];
-const animationStates = [
-    {
-        name : "idle",
-        frames : 7
-    },
-    {
-        name : "jump",
-        frame : 7
+class Raven {
+    constructor() {
+        this.width=100;
+        this.height=50;
+        this.x=canvas.width;
+        this.y=Math.random() * (canvas.height - this.height);
+        this.directionX=Math.random()*5+3;
+        this.directionY=Math.random()*5-2.5;
     }
-];
 
-let frameX = 0;
-let frameY = 0;
-let gameFrame = 0;
-let staggerFrame = 5;
+    update() {
+        this.x-=this.directionX;
+    }
 
-function animate() {
-    ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    // ctx.fillRect(50,50,100,100);
-    // ctx.drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);
-    let position = Math.floor(gameFrame/staggerFrame)%6;
-    frameX = spriteWidth * position;
-    ctx.drawImage(playerImage,frameX,frameY * spriteHeight,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
+    draw() {
+        ctx.fillRect(this.x,this.y,this.width,this.height);
+    }
+}
 
-    gameFrame++;
+function animate(timestamp) {
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let deltaTime=timestamp-lastTime;
+    lastTime=timestamp;
+    timeToNextRaven+=deltaTime;
+    if(timeToNextRaven>ravenInterval) {
+        ravens.push(new Raven());
+        timeToNextRaven=0;
+    }
+    ravens.forEach((raven) => {
+        raven.update();
+        raven.draw();
+    });
     requestAnimationFrame(animate);
 }
 
-animate();
+animate(0);
