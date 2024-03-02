@@ -1,41 +1,92 @@
-const canvas = document.getElementById("canvas1");
-const ctx = canvas.getContext("2d");
-const CANVAS_WIDTH = canvas.width = 600;
-const CANVAS_HEIGHT = canvas.height = 600;
+/** @Type {HTMLCanvasElement} */
+document.addEventListener("DOMContentLoaded", (e) => {
 
-const playerImage = new Image();
-playerImage.src="img/shadow_dog.png";
+    const canvas = document.getElementById("canvas1");
+    const ctx = canvas.getContext("2d");
+    const CANVAS_WIDTH = canvas.width = 500;
+    const CANVAS_HEIGHT = canvas.height = 800;
+    
+    let lastTime=0;
 
-const spriteWidth = 575;
-const spriteHeight = 523;
-
-const spriteAnimations = [];
-const animationStates = [
-    {
-        name : "idle",
-        frames : 7
-    },
-    {
-        name : "jump",
-        frame : 7
+    class Game {
+        constructor(ctx,width,height) {
+            this.width=width;
+            this.height=height;
+            this.ctx=ctx;
+            this.enemies=[];
+            this.enemyInterval=1000;
+            this.enemyTimer=0;
+        }
+        
+        update(deltaTime) {
+            if(this.enemyTimer>this.enemyInterval) {
+                this.enemies=this.enemies.filter(object => !object.markedForDelete);
+                this.#addNewEnemy();
+                this.enemyTimer=0;
+            }
+            else {
+                this.enemyTimer+=deltaTime;
+            }
+            this.enemies.forEach((enemy) => {
+                enemy.update();
+            });
+        }
+    
+        draw() {
+            this.enemies.forEach((enemy) => {
+                enemy.draw(this.ctx);
+            });
+        }
+    
+        #addNewEnemy() {
+            this.enemies.push(new Worm(this));
+        }
     }
-];
+    
+    class Enemy {
+        constructor(game) {
+            this.game=game;
+            this.width=100;
+            this.height=100;
+            this.x=this.game.width;
+            this.y=Math.random() * this.game.height;
+            this.markedForDelete=false;
+        }
+    
+        update() {
+            this.x--;
+            if(this.x<-this.width) {
+                this.markedForDelete=true;
+            }
+        }
+    
+        draw(ctx) {
+            ctx.fillRect(this.x,this.y,this.width,this.height);
+        }
+    }
 
-let frameX = 0;
-let frameY = 0;
-let gameFrame = 0;
-let staggerFrame = 5;
+    class Worm extends Enemy {
+        constructor(game) {
+            super(game);
+            this.width=100;
+            this.height=100;
+            this.x=this.game.width;
+            this.y=Math.random() * this.game.height;
+            this.image=worm;
+        }
+    }
+    
+    const game=new Game(ctx,canvas.width,canvas.height);
 
-function animate() {
-    ctx.clearRect(0,0,CANVAS_WIDTH,CANVAS_HEIGHT);
-    // ctx.fillRect(50,50,100,100);
-    // ctx.drawImage(image,sx,sy,sw,sh,dx,dy,dw,dh);
-    let position = Math.floor(gameFrame/staggerFrame)%6;
-    frameX = spriteWidth * position;
-    ctx.drawImage(playerImage,frameX,frameY * spriteHeight,spriteWidth,spriteHeight,0,0,spriteWidth,spriteHeight);
+    function animate(timestamp) {
+        ctx.clearRect(0,0,canvas.width,canvas.height);
+        let deltaTime=timestamp-lastTime;
+        lastTime=timestamp;
+        game.update(deltaTime);
+        game.draw();
+        requestAnimationFrame(animate);
+    }
+    
+    animate(0);
 
-    gameFrame++;
-    requestAnimationFrame(animate);
-}
-
-animate();
+});
