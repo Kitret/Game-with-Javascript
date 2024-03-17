@@ -1,35 +1,18 @@
 /** @type {HTMLCanvasElement}*/
 
-export default class InputHandler {
+export class InputHandler {
     constructor() {
-        this.lastKey="";
+        this.keys=[];
+
         window.addEventListener("keydown", (e) => {
-            if(e.key==="ArrowLeft") {
-                this.lastKey="PRESS left";
-            }
-            else if(e.key==="ArrowRight") {
-                this.lastKey="PRESS right";
-            }
-            else if(e.key==="ArrowUp") {
-                this.lastKey="PRESS up";
-            }
-            else if(e.key==="ArrowDown") {
-                this.lastKey="PRESS down";
+            if((e.key==="ArrowDown" || e.key==="ArrowUp" || e.key==="ArrowLeft" || e.key==="ArrowRight" || e.key==="Enter") && this.keys.indexOf(e.key)===-1) {
+                this.keys.push(e.key);
             }
         });
-
+        
         window.addEventListener("keyup", (e) => {
-            if(e.key==="ArrowLeft") {
-                this.lastKey="RELEASE left";
-            }
-            else if(e.key==="ArrowRight") {
-                this.lastKey="RELEASE right";
-            }
-            else if(e.key==="ArrowUp") {
-                this.lastKey="RELEASE up";
-            }
-            else if(e.key==="ArrowDown") {
-                this.lastKey="RELEASE down";
+            if(e.key==="ArrowDown" || e.key==="ArrowUp" || e.key==="ArrowLeft" || e.key==="ArrowRight" || e.key==="Enter") {
+                this.keys.splice(this.keys.indexOf(e.key),1);
             }
         });
     }
