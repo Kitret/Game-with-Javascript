@@ -31,27 +31,38 @@ window.addEventListener("DOMContentLoaded", () => {
             this.background.update();
             this.player.update(this.input.keys,deltaTime);
             this.enemyTimer+=deltaTime;
+
+            // handle enemies
             if(this.enemyTimer>=this.enemyInterval) {
                 this.enemies=this.enemies.filter(object => !object.markedForDelete);
                 this.#addEnemy();
                 this.enemyTimer=0;
-                console.log(this.enemies);
             }
             this.enemies.forEach((enemy) => {
-                enemy.update();
+                enemy.update(deltaTime);
             });
         }
 
         draw(ctx) {
             this.background.draw(ctx);
             this.player.draw(ctx);
+            
+            // draw enemies
             this.enemies.forEach((enemy) => {
                 enemy.draw(ctx);
             });
         }
 
         #addEnemy() {
-            this.enemies.push(new FlyingEnemy(this));
+            if(this.speed>0 && Math.random()<0.5) {
+                this.enemies.push(new GroundEnemy(this));
+            }
+            else if(this.speed>0 && Math.random()>0.5) {
+                this.enemies.push(new ClimbingEnemy(this));
+            }
+            if(Math.random()<0.5) {
+                this.enemies.push(new FlyingEnemy(this));
+            }
         }
     }
     

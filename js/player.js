@@ -14,7 +14,7 @@ export class Player {
         this.maxFrame=7;
         this.frameY=0;
         this.speed=0;
-        this.maxSpeed=6;
+        this.maxSpeed=10;
         this.vy=0;
         this.weight=1;
         this.fps=20;
