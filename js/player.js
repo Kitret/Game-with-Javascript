@@ -1,6 +1,6 @@
 /** @type {HTMLCanvasElement}*/
 
-import { Sitting, Running, Jumping, Falling } from "./playerStates.js";
+import { Sitting, Running, Jumping, Falling, Rolling } from "./playerStates.js";
 
 export class Player {
     constructor(game) {
@@ -20,12 +20,12 @@ export class Player {
         this.fps=20;
         this.frameTimer=0;
         this.frameInterval=1000/this.fps;
-        this.states=[new Sitting(this), new Running(this), new Jumping(this), new Falling(this)];
-        this.currentState=this.states[0];
-        this.currentState.enter();
+        this.states=[new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game)];
     }
 
     update(input,deltaTime) {
+        this.checkCollision();
+
         // handle input
         this.currentState.handleInput(input);
 
@@ -59,6 +59,7 @@ export class Player {
     }
 
     draw(ctx) {
+        if(this.game.debug) ctx.strokeRect(this.x,this.y,this.width,this.height);
         ctx.drawImage(this.image,this.frameX*this.width,this.frameY*this.height,this.width,this.height,this.x,this.y,this.width,this.height);
     }
 
@@ -70,5 +71,18 @@ export class Player {
         this.currentState=this.states[state];
         this.game.speed=this.maxSpeed*speed;
         this.currentState.enter();
+    }
+
+    checkCollision() {
+        this.game.enemies.forEach(enemy => {
+            if(enemy.x<=this.x+this.width && this.x<=enemy.x+enemy.width && enemy.y<=this.y+this.height && this.y<=enemy.y+enemy.height) {
+                // collision Detected
+                enemy.markedForDelete=true;
+                this.game.score++;
+            }
+            else {
+                // collision not detected
+            }
+        });
     }
 }

@@ -4,6 +4,7 @@ import {Player} from './js/player.js';
 import {InputHandler} from './js/input.js';
 import { Background } from './js/background.js';
 import { FlyingEnemy, GroundEnemy, ClimbingEnemy } from './js/enemies.js';
+import { UI } from './js/UI.js';
 
 window.addEventListener("DOMContentLoaded", () => {
     let lastTime=0;
@@ -15,16 +16,23 @@ window.addEventListener("DOMContentLoaded", () => {
 
     class Game {
         constructor(width,height) {
+            this.score=0;
             this.width=width;
             this.height=height;
             this.groundMargin=80;
             this.speed=0;
             this.background=new Background(this);
             this.player=new Player(this);
-            this.input=new InputHandler();
+            this.input=new InputHandler(this);
+            this.UI=new UI(this);
             this.enemies=[];
+            this.particles=[];
             this.enemyTimer=0;
             this.enemyInterval=1000;
+            this.debug=true;
+            this.fontColor="black";
+            this.player.currentState=this.player.states[0];
+            this.player.currentState.enter();
         }
 
         update(deltaTime) {
@@ -33,23 +41,34 @@ window.addEventListener("DOMContentLoaded", () => {
             this.enemyTimer+=deltaTime;
 
             // handle enemies
+            this.enemies=this.enemies.filter(object => !object.markedForDelete);
             if(this.enemyTimer>=this.enemyInterval) {
-                this.enemies=this.enemies.filter(object => !object.markedForDelete);
                 this.#addEnemy();
                 this.enemyTimer=0;
             }
             this.enemies.forEach((enemy) => {
                 enemy.update(deltaTime);
             });
+
+            // handle particles
+            this.particles.forEach((particle,index) => {
+                particle.update();
+                if(particle.markedForDelete) this.particles.splice(index, 1);
+            });
         }
 
         draw(ctx) {
             this.background.draw(ctx);
             this.player.draw(ctx);
-            
+            this.UI.draw(ctx);
             // draw enemies
             this.enemies.forEach((enemy) => {
                 enemy.draw(ctx);
+            });
+
+            // draw particles
+            this.particles.forEach((particle) => {
+                particle.draw(ctx);
             });
         }
 

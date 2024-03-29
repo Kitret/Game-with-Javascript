@@ -2,6 +2,7 @@ class Enemy {
     constructor() {
         this.frameX=0;
         this.frameY=0;
+        this.markedForDelete=false;
         this.fps=20;
         this.frameInterval=1000/this.fps;
         this.frameTimer=0;
@@ -23,6 +24,7 @@ class Enemy {
     }
 
     draw(ctx) {
+        if(this.game.debug) ctx.strokeRect(this.x,this.y,this.width,this.height);
         ctx.drawImage(this.image,this.frameX*this.width,this.frameY*this.height,this.width,this.height,this.x,this.y,this.width,this.height);
     }
 }
@@ -38,7 +40,6 @@ export class FlyingEnemy extends Enemy {
         this.speedX=Math.random()+1;
         this.speedY=0;
         this.maxFrame=6;
-        this.markedForDelete=false;
         this.image=document.getElementById("enemy_fly");
         this.angle=0;
         this.va=Math.random()*0.1+0.1;
