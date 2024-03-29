@@ -32,6 +32,7 @@ window.addEventListener("DOMContentLoaded", () => {
             this.debug=false;
             this.fontColor="black";
             this.collisions=[];
+            this.lives=5;
             this.time=0;
             this.maxTime=20000;
             this.gameOver=false;

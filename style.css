@@ -2,6 +2,7 @@
     margin : 0px;
     padding : 0px;
     box-sizing : border-box;
+    font-family: "Creepster", system-ui;
 }
 
 #canvas1 {
@@ -14,6 +15,6 @@
     max-height: 100%;
 }
 
-#player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider, #fire, #collision {
+#player, #layer1, #layer2, #layer3, #layer4, #layer5, #enemy_fly, #enemy_plant, #enemy_spider, #fire, #collision, #lives {
     display: none;
 }

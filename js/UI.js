@@ -4,7 +4,8 @@ export class UI {
     constructor(game) {
         this.game=game;
         this.fontSize=30;
-        this.fontFamily="Helvetica";
+        this.fontFamily="Creepster";
+        this.livesImage=document.getElementById("lives");
     }
 
     draw(ctx) {
@@ -22,6 +23,10 @@ export class UI {
         // timer
         ctx.font = this.fontSize*0.8+"px "+this.fontFamily;
         ctx.fillText("Timer : "+(this.game.time/1000).toFixed(1),20,80);
+        // lives
+        for(let i=0;i<this.game.lives;i++) {
+            ctx.drawImage(this.livesImage,20+i*25,95,25,25);
+        }
 
         // game Over Message
         if(this.game.gameOver) {
