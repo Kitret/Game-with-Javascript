@@ -32,7 +32,26 @@ export class Dust extends Particle {
 }
 
 export class Splash extends Particle {
+    constructor(game,x,y) {
+        super(game);
+        this.size=Math.random()*100+100;
+        this.x=x;
+        this.y=y;
+        this.speedX=Math.random()*6-3;
+        this.speedY=Math.random()*2+2;
+        this.gravity=0;
+        this.image=document.getElementById("fire");
+    }
 
+    update() {
+        super.update();
+        this.gravity+=0.1;
+        this.y+=this.gravity;
+    }
+
+    draw(ctx) {
+        ctx.drawImage(this.image,this.x,this.y,this.size,this.size);
+    }
 }
 
 export class Fire extends Particle {

@@ -1,6 +1,7 @@
 /** @type {HTMLCanvasElement}*/
 
-import { Sitting, Running, Jumping, Falling, Rolling } from "./playerStates.js";
+import { Sitting, Running, Jumping, Falling, Rolling, Diving, Hit } from "./playerStates.js";
+import { Collision } from "./Collision.js";
 
 export class Player {
     constructor(game) {
@@ -20,7 +21,7 @@ export class Player {
         this.fps=20;
         this.frameTimer=0;
         this.frameInterval=1000/this.fps;
-        this.states=[new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game)];
+        this.states=[new Sitting(this.game), new Running(this.game), new Jumping(this.game), new Falling(this.game), new Rolling(this.game), new Diving(this.game), new Hit(this.game)];
     }
 
     update(input,deltaTime) {
@@ -35,6 +36,7 @@ export class Player {
         else if(input.includes("ArrowLeft")) this.speed=-this.maxSpeed;
         else this.speed=0;
 
+        // horizontal boundary
         if(this.x<=0) this.x=0;
         else if(this.x>=this.game.width-this.width) this.x=this.game.width-this.width;
 
@@ -47,7 +49,9 @@ export class Player {
         else {
             this.vy=0;
         }
-        if(this.y>=this.game.height-this.height) this.y=this.game.height-this.height-this.game.groundMargin;
+
+        // vertical boundary
+        if(this.y>=this.game.height-this.height-this.game.groundMargin) this.y=this.game.height-this.height-this.game.groundMargin;
 
         // animation 
         this.frameTimer+=deltaTime;
@@ -78,10 +82,13 @@ export class Player {
             if(enemy.x<=this.x+this.width && this.x<=enemy.x+enemy.width && enemy.y<=this.y+this.height && this.y<=enemy.y+enemy.height) {
                 // collision Detected
                 enemy.markedForDelete=true;
-                this.game.score++;
-            }
-            else {
-                // collision not detected
+                this.game.collisions.push(new Collision(this.game,enemy.x+enemy.width*0.5,enemy.y+enemy.height*0.5));
+                if(this.currentState===this.states[4] || this.currentState===this.states[5]) {
+                    this.game.score++;
+                }
+                else {
+                    this.setState(6,0);
+                }
             }
         });
     }
