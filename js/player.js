@@ -68,7 +68,7 @@ export class Player {
     }
 
     onGround() {
-        return this.y>=this.game.width-this.width-this.game.groundMargin;
+        return this.y>=this.game.height-this.height-this.game.groundMargin;
     }
 
     setState(state,speed) {

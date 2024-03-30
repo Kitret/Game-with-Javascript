@@ -30,7 +30,7 @@ export class UI {
 
         // game Over Message
         if(this.game.gameOver) {
-            if(this.game.score>10) {
+            if(this.game.score>this.game.winningScore) {
                 ctx.textAlign="center";
                 ctx.font = this.fontSize*2+"px "+this.fontFamily;
                 ctx.fillText("Boo-Yaah!!" , this.game.width*0.5,this.game.height*0.5-20);

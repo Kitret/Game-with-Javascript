@@ -11,7 +11,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const canvas=document.getElementById("canvas1");
     const ctx=canvas.getContext("2d");
-    canvas.width=500;
+    canvas.width=1000;
     canvas.height=500;
 
     class Game {
@@ -33,8 +33,9 @@ window.addEventListener("DOMContentLoaded", () => {
             this.fontColor="black";
             this.collisions=[];
             this.lives=5;
+            this.winningScore=20;
             this.time=0;
-            this.maxTime=20000;
+            this.maxTime=40000;
             this.gameOver=false;
             this.player.currentState=this.player.states[0];
             this.player.currentState.enter();
